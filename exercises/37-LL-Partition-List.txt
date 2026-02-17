@@ -1,0 +1,388 @@
+/*
+
+
+
+LL: Partition List ( ** Interview Question)
+⚠️ CAUTION: Advanced Challenge Ahead!
+
+This Linked List problem is significantly more challenging than the ones we've tackled so far.
+It's common for students at this stage to find this exercise demanding,
+so don't worry if you're not ready to tackle it yet.
+It's perfectly okay to set it aside and revisit it later when you feel more confident.
+
+If you decide to take on this challenge,
+I strongly advise using a hands-on approach:
+grab a piece of paper and visually map out each step.
+
+This problem requires a clear understanding of how elements in a Linked List interact and move.
+By now, you've observed numerous Linked List animations in the course, which have prepared you for this moment.
+
+This exercise will be a true test of your ability to apply those concepts practically.
+Remember, patience and persistence are key here!
+
+Now, here is the exercise:
+
+___________________________________
+
+
+
+You have a singly linked list that DOES NOT HAVE A TAIL POINTER
+(which will make this method simpler to implement).
+
+Given a value x you need to rearrange the linked list such that all nodes
+with a value less than x come before all nodes with a value greater than or equal to x.
+
+Additionally, the relative order of nodes in both partitions should remain unchanged.
+
+
+Constraints:
+
+The solution should traverse the linked list at most once.
+
+The solution should not create a new linked list.
+
+
+Input:
+
+A singly linked list and an integer x.
+
+
+Output:
+
+The same linked list but rearranged as per the above criteria.
+
+
+Function signature:
+
+public void partitionList(int x);
+
+
+Details:
+
+The function partitionList takes an integer x as a parameter
+and modifies the current linked list in place according to the specified criteria.
+If the linked list is empty (i.e., head is null),
+the function should return immediately without making any changes.
+
+
+
+Example 1:
+
+Input:
+
+Linked List: 3 -> 8 -> 5 -> 10 -> 2 -> 1 x: 5
+
+Process:
+
+Values less than 5: 3, 2, 1
+
+Values greater than or equal to 5: 8, 5, 10
+
+Output:
+
+Linked List: 3 -> 2 -> 1 -> 8 -> 5 -> 10
+
+
+
+
+
+Example 2:
+Input:
+
+Linked List: 1 -> 4 -> 3 -> 2 -> 5 -> 2 x: 3
+
+Process:
+
+Values less than 3: 1, 2, 2
+
+Values greater than or equal to 3: 4, 3, 5
+
+Output:
+
+Linked List: 1 -> 2 -> 2 -> 4 -> 3 -> 5
+
+
+
+
+
+Tips:
+
+While traversing the linked list,
+maintain two separate chains:
+one for values less than x
+and one for values greater than or equal to x.
+
+Use dummy nodes to simplify the handling of the heads of these chains.
+
+After processing the entire list,
+connect the two chains to get the desired arrangement.
+
+
+
+Note:
+
+The solution must maintain the relative order of nodes.
+For instance, in the first example,
+even though 8 appears before 5 in the original list,
+the partitioned list must still have 8 before 5 as their relative order remains unchanged.
+
+Note:
+
+You must solve the problem WITHOUT MODIFYING THE VALUES in the list's nodes
+(i.e., only the nodes' next pointers may be changed.)
+
+*/
+
+
+========== DICAS ==============
+
+Pseudo Code:
+
+As you work through the pseudo-code,
+I recommend sketching the nodes, pointers, and each step on paper.
+This visual representation will greatly aid in understanding and tracking the process.
+
+
+Check if head is null. If it is, the list is empty, so simply return.
+
+Create two dummy nodes, dummy1 and dummy2, 
+and initialize two pointers, prev1 and prev2, 
+pointing to these dummy nodes respectively.
+
+Initialize a pointer current pointing to the head of the list.
+
+Start a while loop that continues until current is null:
+
+Check if the value of the current node is less than the given value x. 
+	I. If it is, 
+	update the next pointer of prev1 to point to current, 
+	and update prev1 to point to current.
+
+	If it is not, 
+	update the next pointer of prev2 to point to current, 
+	and update prev2 to point to current.
+
+Move current one step ahead (i.e., current = current.next).
+
+Set the next pointer of prev2 to null, which terminates the second partition.
+
+Set the next pointer of prev1 to the first node of the second partition (i.e., prev1.next = dummy2.next).
+
+Update the head of the list to the first node of the first partition (i.e., head = dummy1.next).
+
+
+
+This algorithm uses 
+two dummy nodes 
+and 
+two pointers 
+to maintain two separate partitions of the original list, 
+one containing nodes with values less than x, 
+and the other containing nodes with values greater than or equal to x. 
+
+It then concatenates the two partitions and updates the head of the list accordingly.
+
+
+
+=============================
+
+
+
+public class LinkedList {
+
+    private Node head;
+    private int length;
+
+    class Node {
+        int value;
+        Node next;
+
+        Node(int value) {
+            this.value = value;
+        }
+    }
+
+    public LinkedList(int value) {
+        Node newNode = new Node(value);
+        head = newNode;
+        length = 1;
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void printList() {
+        Node temp = head;
+        if (temp == null) {
+            System.out.println("empty");
+        } else {
+            while (temp != null) {
+                System.out.print(temp.value);
+                temp = temp.next;
+                if (temp != null) {
+                    System.out.print(" -> ");
+                }
+            }
+            System.out.println();
+        }
+    }
+    
+    public void makeEmpty() {
+        head = null;
+        length = 0;
+    }
+    
+    public void append(int value) {
+        Node newNode = new Node(value);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+        length++;
+    }
+
+    // WRITE THE PARTITIONLIST METHOD HERE // 
+    //                                     //
+    //                                     //
+    //                                     //
+    //                                     //
+    /////////////////////////////////////////
+
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        LinkedList myLinkedList;
+
+        // Test 1: Empty list
+        System.out.println("Test 1: Empty List");
+        myLinkedList = new LinkedList(1);
+        myLinkedList.makeEmpty();
+        myLinkedList.partitionList(3);
+        System.out.println("List: (empty)");
+        System.out.println("Expected: empty");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 2: Single node (< x)
+        System.out.println("Test 2: Single Node (< x)");
+        myLinkedList = new LinkedList(1);
+        myLinkedList.partitionList(3);
+        System.out.println("List: 1");
+        System.out.println("Expected: 1");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 3: Single node (>= x)
+        System.out.println("Test 3: Single Node (>= x)");
+        myLinkedList = new LinkedList(5);
+        myLinkedList.partitionList(3);
+        System.out.println("List: 5");
+        System.out.println("Expected: 5");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 4: All nodes < x
+        System.out.println("Test 4: All Nodes < x");
+        myLinkedList = new LinkedList(1);
+        myLinkedList.append(2);
+        myLinkedList.append(0);
+        myLinkedList.partitionList(5);
+        System.out.println("List: 1 -> 2 -> 0");
+        System.out.println("Expected: 1 -> 2 -> 0");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 5: All nodes >= x
+        System.out.println("Test 5: All Nodes >= x");
+        myLinkedList = new LinkedList(5);
+        myLinkedList.append(6);
+        myLinkedList.append(7);
+        myLinkedList.partitionList(5);
+        System.out.println("List: 5 -> 6 -> 7");
+        System.out.println("Expected: 5 -> 6 -> 7");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 6: Mixed nodes (< x and >= x)
+        System.out.println("Test 6: Mixed Nodes");
+        myLinkedList = new LinkedList(3);
+        myLinkedList.append(5);
+        myLinkedList.append(8);
+        myLinkedList.append(5);
+        myLinkedList.append(10);
+        myLinkedList.append(2);
+        myLinkedList.append(1);
+        myLinkedList.partitionList(5);
+        System.out.println("Original List: 3 -> 5 -> 8 -> 5 -> 10 -> 2 -> 1");
+        System.out.println("Expected: 3 -> 2 -> 1 -> 5 -> 8 -> 5 -> 10");
+        myLinkedList.printList();
+        System.out.println();
+
+        // Test 7: Nodes with duplicates around pivot
+        System.out.println("Test 7: Duplicates Around Pivot");
+        myLinkedList = new LinkedList(5);
+        myLinkedList.append(1);
+        myLinkedList.append(5);
+        myLinkedList.append(0);
+        myLinkedList.append(5);
+        myLinkedList.partitionList(5);
+        System.out.println("Original List: 5 -> 1 -> 5 -> 0 -> 5");
+        System.out.println("Expected: 1 -> 0 -> 5 -> 5 -> 5");
+        myLinkedList.printList();
+        System.out.println();
+
+        /*
+            EXPECTED OUTPUT:
+            ----------------
+            Test 1: Empty List
+            List: (empty)
+            Expected: empty
+            empty
+
+            Test 2: Single Node (< x)
+            List: 1
+            Expected: 1
+            1
+
+            Test 3: Single Node (>= x)
+            List: 5
+            Expected: 5
+            5
+
+            Test 4: All Nodes < x
+            List: 1 -> 2 -> 0
+            Expected: 1 -> 2 -> 0
+            1 -> 2 -> 0
+
+            Test 5: All Nodes >= x
+            List: 5 -> 6 -> 7
+            Expected: 5 -> 6 -> 7
+            5 -> 6 -> 7
+
+            Test 6: Mixed Nodes
+            Original List: 3 -> 5 -> 8 -> 5 -> 10 -> 2 -> 1
+            Expected: 3 -> 2 -> 1 -> 5 -> 8 -> 5 -> 10
+            3 -> 2 -> 1 -> 5 -> 8 -> 5 -> 10
+
+            Test 7: Duplicates Around Pivot
+            Original List: 5 -> 1 -> 5 -> 0 -> 5
+            Expected: 1 -> 0 -> 5 -> 5 -> 5
+            1 -> 0 -> 5 -> 5 -> 5
+        */
+        
+    }
+    
+}
+
